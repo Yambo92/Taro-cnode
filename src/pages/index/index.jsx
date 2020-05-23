@@ -3,6 +3,9 @@ import { View, Button, Text } from '@tarojs/components'
 
 import './index.less'
 import Menu from '../../components/menu/menu'
+import TopicList from '../../components/topiclist/topiclist'
+
+
 class Index extends Component {
 
     config = {
@@ -28,6 +31,7 @@ class Index extends Component {
     return (
       <View className='index'>
         <Menu></Menu>
+        <TopicList></TopicList>
       </View>
     )
   }

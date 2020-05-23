@@ -31,7 +31,10 @@ class Menu extends Component {
   handleClickItem(index) {
     let { cataData } = this.props;
     let lickedCata = cataData[index];
-    this.props.changeCata && this.props.changeCata(lickedCata);
+    if (lickedCata.key !== this.props.currentCata.key) {
+      //点击同一个菜单分类避免重复请求
+      this.props.changeCata && this.props.changeCata(lickedCata);
+    }
   }
   handleClose() {
     this.props.hideMenu && this.props.hideMenu();

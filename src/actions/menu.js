@@ -1,3 +1,5 @@
+import { getTopicList } from "./topiclist";
+
 //显示抽屉
 export function showDrawer() {
   return function(dispatch) {
@@ -12,5 +14,14 @@ export function hideDrawer() {
 }
 //切换当前分类
 export function changeCurrentCata(currentCata) {
-  return dispatch => dispatch({ type: "changeCata", currentCata });
+  return dispatch => {
+    dispatch({ type: "changeCata", currentCata });
+    dispatch(
+      getTopicList({
+        tab: currentCata.key,
+        page: 1,
+        limit: 20
+      })
+    );
+  };
 }
