@@ -1,0 +1,30 @@
+import Taro, { Component } from "@tarojs/taro";
+import { View, Text, Button, Textarea } from "@tarojs/components";
+import { connect } from "@tarojs/redux";
+import './replycontent.less'
+class ReplyContent extends Component {
+    onbtnCancel(){
+        this.props.onCancelReplyContent()
+    }
+    onbtnOK(){
+        this.props.onOKReplyContent()
+    }
+  render() {
+    return <View className='replycontent'>
+        <Textarea className="replycontent-textarea" placeholder="请输入回复内容"
+
+        ></Textarea>
+        <View className='replycontent-btn-group'>
+            <Button
+            onClick={this.onbtnOK.bind(this)}
+            className="btn">确定</Button>
+            <Button 
+            onClick={this.onbtnCancel.bind(this)}
+            
+            className="btn">取消</Button>
+        </View>
+    </View>;
+  }
+}
+
+export default ReplyContent;
