@@ -27,7 +27,7 @@ class TopicInfo extends Component {
           <View className="topic-info-header-pie">
             <Text className="topic-info-header-text">{myTimeLocal(topicinfo.create_at)}</Text>
             <Text className="topic-info-header-text">{topicinfo.author.loginname}</Text>
-            <Text className="topic-info-header-text">{topicinfo.visit_count + "次浏览"}</Text>
+            <Text className="topic-info-header-text">{topicinfo.visit_count ? topicinfo.visit_count + "次浏览" : ''}</Text>
           </View>
         </View>
         <View className="topic-info-body">
@@ -39,5 +39,7 @@ class TopicInfo extends Component {
     );
   }
 }
-
+TopicInfo.defaultProps = {
+  topicinfo: {}
+}
 export default TopicInfo;

@@ -1,13 +1,13 @@
 import Taro, { Component } from "@tarojs/taro";
 import { View, Text, Button } from "@tarojs/components";
 import { connect } from "@tarojs/redux";
-import {getTopicInfo, like} from '../../actions/topiclist'
+import {getTopicInfo, like, replyContent} from '../../actions/topiclist'
 
 import TopicInfo from '../../components/topicInfo/topicInfo'
 import Replies from '../../components/topicInfo/replies'
 import ReplyContent from '../../components/topicInfo/replycontent'
 import './detail.less'
-
+import {validateUser} from '../../actions/user'
 @connect(function (store) {
     return {
         topicInfo: store.TopicList.topicInfo,
@@ -31,7 +31,8 @@ class Detail extends Component {
         navigationBarTitleText: '话题详情'
     }
     state = {
-        showReplyContent: false
+        showReplyContent: false,
+        currentReply: {}
     }
     componentWillMount(){
       console.log(this.$router.params.topicid);
@@ -49,28 +50,67 @@ class Detail extends Component {
             id,
             accesstoken: this.props.user.accesstoken,
             mdrender: true
-        })
+        });
     }
     handleLike(id){
         // console.log('like', id)
         this.props.like({id, accesstoken: this.props.user.accesstoken})
     }
     handleReply(){
-        this.setState({showReplyContent: true})
+        validateUser(this.props.user).then(result => {
+            if(result){
+                this.setState({showReplyContent: true})
+            }else {
+                Taro.navigateTo({url: '/pages/login/login'})
+            }
+        })
     }
+    //确认回复
     onOK(params){
-        console.log(params);
-        
+       
+        const {currentReply} = this.state;
+        const reply_id = currentReply ? currentReply.id : null;
+        //@评论人
+        let preName = currentReply ? '@' + currentReply.author.loginname + ' ': '';
+        let datas = {
+            id: this.$router.params.topicid,
+            accesstoken: this.props.user.accesstoken,
+            content: preName + params,
+            reply_id
+        }
+        replyContent(datas).then((result) => {
+            if(result&&result.success){
+                this.getDetail();
+            }
+            this.onCancel()
+        }).catch(err => console.log(err)
+        )
+
     }
     onCancel(){
+        
         this.setState({showReplyContent: false})
     }
+    //对评论进行回复
+    onReplytoReply(reply){
+        validateUser(this.props.user).then(result => {
+            if(result){
+                this.setState({currentReply: reply, showReplyContent: true})
+
+            }else {
+                Taro.navigateTo({url: '/pages/login/login'})
+            }
+        })
+    }
   render() {
-      let {topicInfo, replies} = this.props;
+      let {topicInfo, replies, user} = this.props;
       let {showReplyContent} = this.state;
     return <View>
        <TopicInfo topicinfo={topicInfo} />
-       <Replies replies={replies} onLike={this.handleLike.bind(this)} />
+       <Replies
+       user={user}
+       onReplytoReply={this.onReplytoReply.bind(this)}
+       replies={replies} onLike={this.handleLike.bind(this)} />
         <Button className="reply-btn" onClick={this.handleReply.bind(this)}>回复</Button>
       {
           showReplyContent ?  

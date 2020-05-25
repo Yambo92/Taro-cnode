@@ -1,0 +1,32 @@
+.topic-panel{
+    padding: 10PX;
+    font-size: 14PX;
+    .topic-panel-title{
+        background-color: #3e75ff;
+        color: #fff;
+        padding: 5PX 0;
+        padding-left: 10PX;
+        border-radius: 4PX;
+    }
+    .topic-panel-list{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        margin: 10PX 0;
+        .topic-panel-list-img{
+            width: 28PX;
+            height: 28PX;
+            min-width: 28PX;
+            border-radius: 50%;
+        }
+        .topic-panel-list-date{
+            color: #ccc;
+        }
+        .topic-panel-list-content{
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            width: 50%;
+        }
+    }
+}

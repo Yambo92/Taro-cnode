@@ -3,12 +3,33 @@ import { View, Text, Button, Image, RichText } from "@tarojs/components";
 import { connect } from "@tarojs/redux";
 import "./replies.less";
 import { myTimeLocal } from "../../utils/date";
+import {validateUser} from '../../actions/user'
 
 const isweapp = process.env.TARO_ENV === "weapp"; //小程序
 
 class Replies extends Component {
   handleLike(reply){
-    this.props.onLike(reply.id)
+
+    let {user} = this.props;
+    validateUser(user).then(result => {
+      if(result){
+        this.props.onLike(reply.id)
+      } else {
+        Taro.navigateTo({url: '/pages/login/login'})
+      }
+    })
+  }
+  replytoReply(reply){
+    let {user} = this.props;
+    console.log('uuuuuu', user);
+    
+    validateUser(user).then(result => {
+      if(result){
+        this.props.onReplytoReply(reply)
+      } else {
+        Taro.navigateTo({url: '/pages/login/login'})
+      }
+    })
   }
   render() {
     let { replies } = this.props;
@@ -52,6 +73,7 @@ class Replies extends Component {
                   />
                   <Text className='uped-length'>{reply.ups.length}</Text>
                   <Image
+                    onClick={this.replytoReply.bind(this, reply)}
                     className="topicinfo-reply-image"
                     src={require("../../assets/img/reply.png")}
                   />

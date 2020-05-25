@@ -8,9 +8,11 @@ import menuImg from "../../assets/img/menu.png";
 import mySelf from "../../assets/img/myself.png";
 import { showDrawer, changeCurrentCata, hideDrawer } from "../../actions/menu";
 
+import { validateUser } from "../../actions/user";
+
 @connect(
   function(store) {
-    return { ...store.menu };
+    return { ...store.menu, user: store.user };
   },
   function(dispatch) {
     return {
@@ -39,6 +41,17 @@ class Menu extends Component {
   handleClose() {
     this.props.hideMenu && this.props.hideMenu();
   }
+  toUser() {
+    let { user } = this.props;
+    validateUser(user).then(result => {
+      if (result) {
+        //跳转到用户详情
+        Taro.navigateTo({ url: "/pages/user/user" });
+      } else {
+        Taro.navigateTo({ url: "/pages/login/login" });
+      }
+    });
+  }
   render() {
     let { showDrawer, cataData } = this.props;
     let items = this.getItems(cataData);
@@ -60,7 +73,11 @@ class Menu extends Component {
           <Text>
             {this.props.currentCata ? this.props.currentCata.value : ""}
           </Text>
-          <Image className="img" src={mySelf} />
+          <Image
+            className="img"
+            src={mySelf}
+            onClick={this.toUser.bind(this)}
+          />
         </View>
       </View>
     );

@@ -3,15 +3,28 @@ import { View, Text, Button, Textarea } from "@tarojs/components";
 import { connect } from "@tarojs/redux";
 import './replycontent.less'
 class ReplyContent extends Component {
+    state = {
+        value: ''
+    }
     onbtnCancel(){
         this.props.onCancelReplyContent()
     }
     onbtnOK(){
-        this.props.onOKReplyContent()
+        if(this.state.value){
+            this.props.onOKReplyContent(this.state.value)
+        }else {
+            Taro.showToast({title: '请输入评论内容', icon:'none'})
+        }
+    }
+    handleTextarea(event){
+        let result = event.target.value;
+        this.setState({value: result})
     }
   render() {
     return <View className='replycontent'>
-        <Textarea className="replycontent-textarea" placeholder="请输入回复内容"
+        <Textarea
+            onInput={this.handleTextarea.bind(this)}
+        className="replycontent-textarea" placeholder="请输入回复内容"
 
         ></Textarea>
         <View className='replycontent-btn-group'>

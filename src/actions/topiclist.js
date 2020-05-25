@@ -6,6 +6,7 @@ import Taro from "@tarojs/taro";
 export function getTopicList(params) {
   return async dispatch => {
     let result = await getJSON(api.gettopics, params);
+
     if (result && result.data.success) {
       dispatch({ type: "getTopicList", list: result.data.data });
     } else {
@@ -52,4 +53,32 @@ export function like(params) {
       Taro.showToast({ title: "点赞失败！", icon: "none" });
     }
   };
+}
+
+//回复
+export async function replyContent(params) {
+  try {
+    let result = await postJSON(
+      api.createcomment + params.id + "/replies",
+      params
+    );
+    if (result.success) {
+      return result;
+    } else {
+      Taro.showToast({ title: "评论失败！", icon: "none" });
+    }
+  } catch (err) {
+    Taro.showToast({ title: "评论失败！", icon: "none" });
+  }
+}
+
+export async function submitTopic(params) {
+  try {
+    let result = await postJSON(api.createtopic, params);
+    if (result.success) {
+      return result;
+    }
+  } catch (err) {
+    Taro.showToast({ title: "发布失败！", icon: "none" });
+  }
 }
