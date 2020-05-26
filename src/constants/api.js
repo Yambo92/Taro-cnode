@@ -6,7 +6,8 @@ const apiObject = {
   getuserinfo: rootPath + "/user/", //获取用户详情
   createtopic: rootPath + "/topics", //新建话题
   createcomment: rootPath + "/topic/", //新建评论
-  like: rootPath + "/reply/" //点赞
+  like: rootPath + "/reply/", //点赞
+  updatetopic: rootPath + "/topics/update" //更新主题
 };
 
 export default apiObject;

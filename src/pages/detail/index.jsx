@@ -105,8 +105,11 @@ class Detail extends Component {
   render() {
       let {topicInfo, replies, user} = this.props;
       let {showReplyContent} = this.state;
+    let isSelf =  user.loginname === topicInfo.author.loginname
     return <View>
-       <TopicInfo topicinfo={topicInfo} />
+       <TopicInfo topicinfo={topicInfo}
+        selfPublish = {isSelf}
+       />
        <Replies
        user={user}
        onReplytoReply={this.onReplytoReply.bind(this)}
